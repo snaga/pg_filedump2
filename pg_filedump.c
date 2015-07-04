@@ -1082,6 +1082,8 @@ FormatSpecial ()
 	  strcat (flagString, "SPLITEND|");
 	if (btreeSection->btpo_flags & BTP_HAS_GARBAGE)
 	  strcat (flagString, "HASGARBAGE|");
+	if (btreeSection->btpo_flags & BTP_INCOMPLETE_SPLIT)
+	  strcat (flagString, "HASINCOMPLETESPLIT|");
 	if (strlen (flagString))
 	  flagString[strlen (flagString) - 1] = '\0';
 
@@ -1163,6 +1165,10 @@ FormatSpecial ()
 	  strcat (flagString, "LIST|");
 	if (ginSection->flags & GIN_LIST_FULLROW)
 	  strcat (flagString, "FULLROW|");
+	if (ginSection->flags & GIN_INCOMPLETE_SPLIT)
+	  strcat (flagString, "INCOMPLETESPLIT|");
+	if (ginSection->flags & GIN_COMPRESSED)
+	  strcat (flagString, "COMPRESSED|");
 	if (strlen (flagString))
 	  flagString[strlen (flagString) - 1] = '\0';
 	printf (" GIN Index Section:\n"
