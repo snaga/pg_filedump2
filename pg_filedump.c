@@ -3,7 +3,7 @@
  *                 formatting heap (data), index and control files.
  *
  * Copyright (c) 2002-2010 Red Hat, Inc.
- * Copyright (c) 2011-2014, PostgreSQL Global Development Group
+ * Copyright (c) 2011-2015, PostgreSQL Global Development Group
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,16 @@
 
 #include "pg_filedump.h"
 
-#include "utils/pg_crc_tables.h"
+#if PG_VERSION_NUM >= 90500
+ #include "utils/pg_crc.h"
+
+ #define INIT_CRC32(X) INIT_CRC32C(X)
+ #define COMP_CRC32(X,Y,Z) COMP_CRC32C(X,Y,Z)
+ #define FIN_CRC32(X) FIN_CRC32C(X)
+ #define EQ_CRC32(X,Y) EQ_CRC32C(X,Y)
+#else
+ #include "utils/pg_crc_tables.h"
+#endif
 
 // Global variables for ease of use mostly
 static FILE *fp = NULL;		// File to dump or format
@@ -64,7 +73,7 @@ DisplayOptions (unsigned int validOptions)
     printf
       ("\nVersion %s (for %s)"
        "\nCopyright (c) 2002-2010 Red Hat, Inc."
-       "\nCopyright (c) 2011-2014, PostgreSQL Global Development Group\n",
+       "\nCopyright (c) 2011-2015, PostgreSQL Global Development Group\n",
        FD_VERSION, FD_PG_VERSION);
 
   printf
